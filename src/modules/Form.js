@@ -2,10 +2,11 @@
 export default class Form {
   constructor() {
     this.errorImg = '../img/icons/error.png';
-    this.loadImg = '../index.js../img/icons/load.png';
+    this.loadImg = '../img/icons/load.png';
     this.successImg = '../img/icons/success.png';
     this.statusMessage = document.createElement('img');
     this.forms = document.querySelectorAll('form');
+    this.body = false;
   }
 
   postData(body) {
@@ -18,14 +19,24 @@ export default class Form {
     });
   }
 
+  statusRotate(i) {
+    if (this.statusMessage.classList.contains('rotate')) {
+      i += 1;
+      this.statusMessage.style.transform = `rotate(${i}deg)`;
+      requestAnimationFrame(() => {
+        this.statusRotate(i);
+      });
+    } else {
+      this.statusMessage.style.transform = 'rotate(0deg)';
+    }
+  }
+
   validation(form) {
     form.querySelectorAll('input').forEach((input) => {
       let regex = '';
       input.addEventListener('keypress', (event) => {
         if (input.getAttribute('name') === 'user_name') {
           regex = /[а-я]/i;
-        } else if (input.getAttribute('name') === 'user_phone') {
-          regex = /[\d]/;
         }
 
         if (!event.key.match(regex)) {
@@ -37,48 +48,63 @@ export default class Form {
 
   send(form) {
     form.addEventListener('submit', (event) => {
-        event.preventDefault();
+      event.preventDefault();
+      let body = {};
+      const formData = new FormData(form);
 
-        form.appendChild(this.statusMessage);
-        this.statusMessage.src = this.loadImg;
+      formData.forEach((value, key) => {
+        body[key] = value;
+      });
 
-        const formData = new FormData(form);
-        let body = {};
+      if (form.classList.contains('construct-form') || form.classList.contains('director-form')) {
+        this.body = body;
+        return;
+      }
 
-        formData.forEach((value, key) => {
-          body.key = value;
-        });
+      form.appendChild(this.statusMessage);
+      this.statusMessage.src = this.loadImg;
+      this.statusMessage.classList.add('rotate');
+      requestAnimationFrame(() => {
+        this.statusRotate(0);
+      });
+
+      if (this.body) {
+        Object.assign(body, this.body);
+      }
+
+      this.postData(body)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Ошибка HTTP: ' + response.status);
+          }
+
+          this.statusMessage.src = this.successImg;
+          this.statusMessage.classList.remove('rotate');
 
 
-        this.postData(body)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Ошибка HTTP: ' + response.status);
-            }
-
-            this.statusMessage.src = this.successImg;
-
-            form.querySelectorAll('input').forEach((input) => {
-              input.value = '';
-            });
-
-            setTimeout(() => {
-              form.removeChild(this.statusMessage);
-            }, 2000);
-          })
-          .catch((error) => {
-            console.log(error);
-
-            this.statusMessage.src = this.errorImg;
-
-            setTimeout(() => {
-              form.removeChild(this.statusMessage);
-            }, 2000);
+          form.querySelectorAll('input').forEach((input) => {
+            input.value = '';
           });
+
+          setTimeout(() => {
+            form.removeChild(this.statusMessage);
+          }, 2000);
+        })
+        .catch((error) => {
+          console.log(error);
+
+          this.statusMessage.src = this.errorImg;
+          this.statusMessage.classList.remove('rotate');
+
+
+          setTimeout(() => {
+            form.removeChild(this.statusMessage);
+          }, 2000);
+        });
     });
   }
 
-  addEvents() {
+  init() {
     this.forms.forEach((form) => {
       this.validation(form);
       this.send(form);
