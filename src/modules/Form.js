@@ -1,16 +1,16 @@
 'use strict';
 export default class Form {
   constructor() {
-    this.errorImg = '../img/icons/error.png';
-    this.loadImg = '../img/icons/load.png';
-    this.successImg = '../img/icons/success.png';
+    this.errorImg = './img/icons/error.png';
+    this.loadImg = './img/icons/load.png';
+    this.successImg = './img/icons/success.png';
     this.statusMessage = document.createElement('img');
     this.forms = document.querySelectorAll('form');
     this.body = false;
   }
 
   postData(body) {
-    return fetch('../server.php', {
+    return fetch('./server.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
