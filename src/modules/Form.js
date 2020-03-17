@@ -56,7 +56,13 @@ export default class Form {
         body[key] = value;
       });
 
-      if (form.classList.contains('construct-form') || form.classList.contains('director-form')) {
+      if (form.classList.contains('construct-form')) {
+        body['calc-result'] = document.querySelector('#calc-result').value;
+        this.body = body;
+        return;
+      }
+
+      if (form.classList.contains('director-form')) {
         this.body = body;
         return;
       }
