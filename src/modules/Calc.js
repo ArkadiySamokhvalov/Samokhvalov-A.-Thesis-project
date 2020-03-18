@@ -98,7 +98,7 @@ export default class Calculator {
           secondBlock.classList.remove('hidden');
           selects.forEach((item) => {
             i++;
-            item.addAttribute('name', names[i]);
+            item.setAttribute('name', names[i]);
           });
           this.type = false;
           this.diametr = {

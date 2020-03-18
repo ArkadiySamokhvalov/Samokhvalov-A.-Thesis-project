@@ -86,7 +86,7 @@ export default class Form {
 
           this.statusMessage.src = this.successImg;
           this.statusMessage.classList.remove('rotate');
-
+          this.body = false;
 
           form.querySelectorAll('input').forEach((input) => {
             input.value = '';
@@ -101,7 +101,7 @@ export default class Form {
 
           this.statusMessage.src = this.errorImg;
           this.statusMessage.classList.remove('rotate');
-
+          this.body = '';
 
           setTimeout(() => {
             form.removeChild(this.statusMessage);
