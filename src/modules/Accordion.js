@@ -21,16 +21,8 @@ export default class Accordion {
               if (i === index) {
                 this.bodies[i].classList.add('in');
                 let block = this.container.querySelector(this.indexes[i].getAttribute('href'));
-                document.getElementById(block.getAttribute('aria-labelledby')).scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'start'
-                });
-                //this.headers[i].parentNode.classList.remove('slideInUp');
-                //this.headers[i].parentNode.classList.add('slideInDown');
               } else {
                 this.bodies[i].classList.remove('in');
-                // this.headers[i].parentNode.classList.add('slideInUp');
-                // this.headers[i].parentNode.classList.remove('slideInDown');
               }
             }
           }

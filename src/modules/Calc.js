@@ -81,14 +81,13 @@ export default class Calculator {
 
       if (target === this.checkbox) {
         let secondBlock = this.container.querySelector('.second_block');
-        let names = [];
+        let names = ['diametr-two', 'quantity-two'];
         let selects = secondBlock.querySelectorAll('select');
 
         if (this.checkbox.checked) {
           this.type = true;
           secondBlock.classList.add('hidden');
           selects.forEach((item) => {
-            names.push(item.getAttribute('name'));
             item.removeAttribute('name');
           });
           this.diametr = this.selectD[0].value;
@@ -97,8 +96,8 @@ export default class Calculator {
           let i = 0;
           secondBlock.classList.remove('hidden');
           selects.forEach((item) => {
-            i++;
             item.setAttribute('name', names[i]);
+            i++;
           });
           this.type = false;
           this.diametr = {

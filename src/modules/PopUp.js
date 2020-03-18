@@ -12,6 +12,10 @@ export default class PopUp {
     document.addEventListener('click', (event) => {
       let target = event.target;
 
+      if (target.matches('a.call-btn')) {
+        event.preventDefault();
+      }
+
       if (target.matches('.call-btn')) {
         this.popUpCall.classList.add('active');
         this.activePopUp = this.popUpCall;
